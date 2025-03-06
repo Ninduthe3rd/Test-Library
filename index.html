@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduHub</title>
     <style>
-        /* Reset some default styles */
+        /* (CSS styles from the previous response - No changes here) */
         body, h1, p, ul, li {
             margin: 0;
             padding: 0;
@@ -266,15 +266,18 @@
         const closeBtn = document.querySelector('.close');
 
 
-        const physicsFiles = [
+        // Updated mathFiles array with specific file names and paths
+        const mathFiles = [
+            { name: 'math.test.unit3.pg1.jpg', url: 'math/math.test.unit3.pg1.jpg' },
+            { name: 'math.test.unit3.pg2.jpg', url: 'math/math.test.unit3.pg2.jpg' },
+            { name: 'math.test.unit3.pg3.jpg', url: 'math/math.test.unit3.pg3.jpg' },
+            { name: 'math.test.unit3.pg4.jpg', url: 'math/math.test.unit3.pg4.jpg' }
+        ];
+      //Keep the old Physics files, just in case we need to switch back, and for testing
+      const physicsFiles = [
             { name: 'Kinematics.pdf', url: 'physics/Kinematics.pdf' },
             { name: 'Thermodynamics.docx', url: 'physics/Thermodynamics.docx' },
             { name: 'OpticsNotes.txt', url: 'physics/OpticsNotes.txt'}
-        ];
-
-        const mathFiles = [
-            { name: 'Calculus.pdf', url: 'math/Calculus.pdf' },
-            { name: 'LinearAlgebra.docx', url: 'math/LinearAlgebra.docx' }
         ];
 
        function showHomeScreen() {
@@ -328,13 +331,13 @@
         physicsButton.addEventListener('click', () => {
             homeScreen.style.display = 'none';
             physicsFilesSection.style.display = 'block';
-            displayFiles(physicsFiles, physicsFileList);
+            displayFiles(physicsFiles, physicsFileList);  //Keep the Physics List
         });
 
         mathButton.addEventListener('click', () => {
             homeScreen.style.display = 'none';
             mathFilesSection.style.display = 'block';
-            displayFiles(mathFiles, mathFileList);
+            displayFiles(mathFiles, mathFileList); // Use the updated mathFiles
         });
 
         // Preview functionality
