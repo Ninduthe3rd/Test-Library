@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduHub</title>
+    <style>
+        /* Reset some default styles */
+        body, h1, p, ul, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f8ff; /* Light blue background */
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px; /* Increased container size */
+            margin: 0 auto;
+            padding: 0 20px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6e8efb, #a777e3); /* Gradient header */
+            color: #fff;
+            padding: 1.5rem 0; /* Increased padding */
+            text-align: center;
+            margin-bottom: 3rem;
+            border-radius: 0 0 20px 20px; /* Rounded bottom corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        }
+
+        .header h1 {
+            font-size: 3rem; /* Even larger header font */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Text shadow */
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 60vh;
+            justify-content: center;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 20px 40px; /* Larger buttons */
+            margin: 15px; /* More spacing */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px; /* More rounded corners */
+            font-size: 1.5rem; /* Larger font */
+            transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transitions */
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Button shadow */
+        }
+
+        .button:hover {
+            transform: translateY(-3px); /* Slight lift on hover */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+        }
+
+        #physics-button {
+            background-color: #e74c3c; /* Red */
+        }
+
+        #math-button {
+            background-color: #2ecc71; /* Green */
+        }
+
+
+        .file-section {
+            display: none;
+            width: 90%; /* Wider section */
+            margin: 30px auto; /* More margin */
+            background-color: #fff;
+            padding: 25px; /* More padding */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;  /*Important for clearing floats */
+        }
+
+        .file-section h2 {
+          margin-bottom: 1rem;
+          color:#555;
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .file-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;          /* Use flexbox for layout */
+            justify-content: space-between; /* Space out items */
+            align-items: center;     /* Vertically align */
+        }
+         .file-list li:last-child{
+            border-bottom: none;
+         }
+
+        .file-list .file-name { /*Style for just the Filename*/
+            flex-grow: 1;         /* Allow file name to take up available space*/
+            color: #444;         /* Slightly darker text for the file name */
+            margin-right: 10px;  /* Add some space before the buttons*/
+            cursor: pointer;
+        }
+        .file-list .file-name:hover {
+          text-decoration: underline;
+        }
+
+        .file-buttons {
+              /* Container for Preview and Download buttons*/
+            display: flex;
+            gap: 10px;  /* Space between the buttons */
+        }
+
+        .file-list a, .preview-button {
+             /* Style for both preview and download */
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+            display: inline-block; /* Important for consistent sizing */
+            text-align: center;
+            border: none;          /*Remove default button styles */
+            cursor: pointer;
+        }
+
+        .file-list a { /* Download Button Specific Style*/
+           background-color: #3498db;
+           color: #fff;
+        }
+        .preview-button {
+            background-color: #f1c40f; /* Yellow */
+            color: #333;
+        }
+
+        .file-list a:hover {
+            background-color: #2980b9;
+        }
+        .preview-button:hover{
+           background-color: #d4ac0d;
+        }
+
+        .back-button {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 25px; /* Larger back button */
+            background-color: #95a5a6; /* Lighter gray */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px; /* Rounded corners */
+            text-align: center;
+            transition: background-color 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .back-button:hover {
+            background-color: #7f8c8d;
+        }
+         /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000; /* Sit on top of everything */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;  /* Enable scrolling if needed*/
+            background-color: rgba(0,0,0,0.7); /* Black with opacity */
+
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 900px;  /* Limit maximum width*/
+            border-radius: 10px;
+            position: relative;  /*for the close button*/
+        }
+        .modal-content iframe{
+           width: 100%;
+           height: 600px; /* Or any other suitable height */
+           border: none; /* Remove iframe border */
+        }
+
+        .close {
+            color: #aaa;
+            position: absolute;  /*Position absolute within modal-content*/
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="container">
+            <h1>Welcome to EduHub!</h1>
+        </div>
+    </div>
+
+    <div class="container main-content" id="home-screen">
+        <button class="button" id="physics-button">Physics</button>
+        <button class="button" id="math-button">Math</button>
+    </div>
+
+    <div class="file-section" id="physics-files">
+        <h2>Physics Files</h2>
+        <ul class="file-list" id="physics-file-list">
+            </ul>
+         <a href="#" class="back-button" onclick="showHomeScreen()">Back to Home</a>
+    </div>
+
+    <div class="file-section" id="math-files">
+        <h2>Math Files</h2>
+        <ul class="file-list" id="math-file-list">
+            </ul>
+         <a href="#" class="back-button" onclick="showHomeScreen()">Back to Home</a>
+    </div>
+
+     <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <iframe id="previewFrame" src="" ></iframe>
+        </div>
+    </div>
+
+
+    <script>
+        const physicsButton = document.getElementById('physics-button');
+        const mathButton = document.getElementById('math-button');
+        const physicsFilesSection = document.getElementById('physics-files');
+        const mathFilesSection = document.getElementById('math-files');
+        const physicsFileList = document.getElementById('physics-file-list');
+        const mathFileList = document.getElementById('math-file-list');
+        const homeScreen = document.getElementById('home-screen');
+        const previewModal = document.getElementById('previewModal');
+        const previewFrame = document.getElementById('previewFrame');
+        const closeBtn = document.querySelector('.close');
+
+
+        const physicsFiles = [
+            { name: 'Kinematics.pdf', url: 'physics/Kinematics.pdf' },
+            { name: 'Thermodynamics.docx', url: 'physics/Thermodynamics.docx' },
+            { name: 'OpticsNotes.txt', url: 'physics/OpticsNotes.txt'}
+        ];
+
+        const mathFiles = [
+            { name: 'Calculus.pdf', url: 'math/Calculus.pdf' },
+            { name: 'LinearAlgebra.docx', url: 'math/LinearAlgebra.docx' }
+        ];
+
+       function showHomeScreen() {
+            physicsFilesSection.style.display = 'none';
+            mathFilesSection.style.display = 'none';
+            homeScreen.style.display = 'flex';
+            closeModal();
+        }
+        function displayFiles(files, fileListElement) {
+            fileListElement.innerHTML = ''; // Clear previous list
+            if (files.length === 0) {
+              fileListElement.innerHTML = '<li>No files available.</li>';
+              return;
+            }
+            files.forEach(file => {
+                const listItem = document.createElement('li');
+
+                // File name (clickable for preview)
+                const fileNameSpan = document.createElement('span');
+                fileNameSpan.textContent = file.name;
+                fileNameSpan.classList.add('file-name');
+                fileNameSpan.addEventListener('click', () => openPreview(file.url)); // Add preview click
+                listItem.appendChild(fileNameSpan);
+
+
+
+                // Button Container
+                const buttonContainer = document.createElement('div');
+                buttonContainer.classList.add('file-buttons'); // Add class for styling
+
+                // Preview Button
+                const previewButton = document.createElement('button');
+                previewButton.textContent = 'Preview';
+                previewButton.classList.add('preview-button');
+                previewButton.addEventListener('click', () => openPreview(file.url));
+                buttonContainer.appendChild(previewButton);
+
+                //Download Link
+                const link = document.createElement('a');
+                link.href = file.url;
+                link.textContent = 'Download';
+                link.setAttribute('download', '');
+                buttonContainer.appendChild(link);
+
+                listItem.appendChild(buttonContainer); // Add the button container to the list item
+                fileListElement.appendChild(listItem);
+            });
+        }
+
+
+        physicsButton.addEventListener('click', () => {
+            homeScreen.style.display = 'none';
+            physicsFilesSection.style.display = 'block';
+            displayFiles(physicsFiles, physicsFileList);
+        });
+
+        mathButton.addEventListener('click', () => {
+            homeScreen.style.display = 'none';
+            mathFilesSection.style.display = 'block';
+            displayFiles(mathFiles, mathFileList);
+        });
+
+        // Preview functionality
+        function openPreview(url) {
+            // Check file extension and handle appropriately
+            const fileExtension = url.split('.').pop().toLowerCase();
+
+            if (fileExtension === 'pdf') {
+                previewFrame.src = url;         // Directly embed PDFs
+            } else if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+                previewFrame.src = url;         //Directly embed Images.
+            }
+            else if(fileExtension === 'txt'){
+               previewFrame.src = url;
+            }
+            else {
+                // For other file types, you might show a message or use a different viewer
+                previewFrame.src = '';  // Clear previous content
+                previewFrame.contentWindow.document.body.innerHTML = `<p>Preview not available for this file type.  Please download the file.</p>`;
+            }
+
+            previewModal.style.display = 'block';
+        }
+
+        // Close modal
+        function closeModal(){
+             previewModal.style.display = 'none';
+        }
+        closeBtn.addEventListener('click', closeModal);
+
+        // Close modal if clicked outside the content area
+        window.addEventListener('click', (event) => {
+            if (event.target === previewModal) {
+               closeModal();
+            }
+        });
+
+
+    </script>
+</body>
+</html>
